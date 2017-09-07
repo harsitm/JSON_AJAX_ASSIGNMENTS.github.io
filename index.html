@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8" >
+	<script src="jquery-3.2.1.min.js"></script>
+	<style>
+	body{
+		font-family:Electrolize;
+	}
+		tr:nth-child(even){
+			background-color:#f5f5f5;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<button id="disp">Fetch JSON DATA</button>
+	<table id="tbl">
+		
+	</table>
+<script>
+$("#disp").click(function(){
+var handler=new XMLHttpRequest();
+handler.open("GET","https://harsitm.github.io/formValidatioJS.github.io/text.json",true);
+handler.onreadystatechange=function(){
+	if(this.status==200 && this.readyState==4){
+		var data=JSON.parse(this.responseText);
+	console.log(data);
+		var tr="<tr> <th>ProductId</th> <th> ProductName</th> <th>Date_of_Mfg</th><th>Other Accessories</th></tr><tr>";
+		for(i=0;i<data.length;i++){
+		tr+="<td>"+data[i].ProductId+"</td>";
+		tr+="<td>"+data[i].Name+"</td>";
+		tr+="<td>"+data[i].MfgDate+"</td><td>";
+		for(j=0;j<data[i].Access.length;j++){
+		if(data[i].Access.length==1){
+		tr+=""+data[i].Access[j]+" ";
+		}
+		if(data[i].Access.length-1!=j){
+		tr+=""+data[i].Access[j]+" ,";
+		}
+		else{
+		tr+=""+data[i].Access[j]+" ";
+		}	
+		}
+		tr+="</td>"
+		tr+="</tr>";
+		}
+		$("#tbl").html(tr);
+	}
+};
+handler.send();
+});
+
+</script>	
+</body>
+</html>

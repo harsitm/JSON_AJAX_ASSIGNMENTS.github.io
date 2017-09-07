@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html lang="en-us">
+<head>
+	<meta charset="UTF-8" >
+	<script src="jquery-3.2.1.min.js"></script>
+	<style>
+	body{
+		font-family:Electrolize;
+	}
+		tr:nth-child(even){
+			background-color:#f5f5f5;
+		}
+	</style>
+</head>
+	
+<body>
+<h1>Fetch JSON data</h1>
+<button id="disp">Fetch JSON Datas</button>
+	<table id="tbl">
+		
+	</table>
+	<hr>
+	<hr>
+	<h1>Search Here!</h1>
+	<input type="text" id="cname" placeholder="Enter First Name" >
+	<input type="text" id="cname1" placeholder="Enter Last Name" >
+	<button id="btn1">Search</button>
+	<br>
+	<br>
+	<br>
+	
+	<h1>Enter New Record Here!</h1>
+	<form name="myForm">
+		
+		<br>
+		<input type="text" placeholder="Enter First Name" id="fname">
+		<input type="text" placeholder="Enter Last Name" id="lname" >
+		<input type="date" id="dateselected" >
+		<input list="products" placeholder="Select Products" id="myvalue">
+		<datalist id="products">
+		</datalist>	
+	</form>
+	<br>
+	<button id="savedatas">Save</button>
+	
+	<!--<button id="retrall" >Retrieve All Local Storage Data</button>-->
+	<br>
+	<br>
+	<div id="tobedisplayed">
+	
+	</div>
+	
+	<br>
+	<br>
+	<br>
+	<h1>Experimental</h1>
+	<button id="itemlist" >Items</button>
+	<button id="retrall" >Retrieve All Local Storage Data</button>
+<script>
+$("#disp").click(function(){
+var handler=new XMLHttpRequest();
+handler.open("GET","https://harsitm.github.io/formValidatioJS.github.io/text.json",true);
+handler.onreadystatechange=function(){
+	if(this.status==200 && this.readyState==4){
+		var data=JSON.parse(this.responseText);
+		
+	console.log(data);
+		var tr="<tr> <th>ProductId</th> <th> ProductName</th> <th>Date_of_Order</th><th>Other Accessories</th></tr><tr>";
+		for(i=0;i<data.length;i++){
+		var m="<option>"+data[i].Name+"</option>"
+		$("#products").append(m);
+		
+		tr+="<td>"+data[i].ProductId+"</td>";
+		tr+="<td>"+data[i].Name+"</td>";
+		tr+="<td>"+data[i].MfgDate+"</td><td>";
+		for(j=0;j<data[i].Access.length;j++){
+		
+		if(data[i].Access.length==1){
+		tr+=""+data[i].Access[j]+" ";
+		}
+		if(data[i].Access.length-1!=j){
+		tr+=""+data[i].Access[j]+" ,";
+		}
+		else{
+		tr+=""+data[i].Access[j]+" ";
+		}	
+		}
+		tr+="</td>"
+		tr+="</tr>";
+		}
+		$("#tbl").html(tr);
+	}
+};
+handler.send();
+});
+
+
+
+
+if(typeof(Storage)!=="undefined"){
+
+if(localStorage.counterClient){
+localStorage.counterClient=localStorage.counterClient;
+}
+else{
+localStorage.setItem("counterClient",1);
+}
+}
+
+
+else{
+console.log("Not supported");
+}
+
+
+
+
+$("#savedatas").click(function(){
+
+	if(typeof(Storage)!=="undefined"){
+	var fn=$("#fname").val();
+	var ln=$("#lname").val();
+	var dv=$("#dateselected").val();
+	var d=new Date(dv);
+	var cd=d.getFullYear();
+	var pn=$("#myvalue").val();
+	
+	var counterage=0;
+	var kd=new Date();
+	var md=Number(kd.getFullYear());
+	while(cd!=md){
+	counterage++;
+	cd++;
+	}
+	console.log(counterage);
+	
+	
+	var testObject={
+		'firstName' : fn,
+		'lastName' : ln,
+		'DOB' : dv,
+		'age' : counterage,
+		'productName' : pn
+	
+	};
+	console.log("DOB ALSO STORED"+dv);
+	objid="empinfo"+localStorage.counterClient+"";
+	localStorage.setItem(objid, JSON.stringify(testObject));
+console.log(localStorage.counterClient);
+// Retrieve the object from storage
+var retrievedObject = localStorage.getItem(objid);
+
+console.log('retrievedObject: ', JSON.parse(retrievedObject));
+
+localStorage.counterClient=Number(localStorage.counterClient)+1;
+
+	/*
+	fnl="fname"+localStorage.counterClient+"";
+	localStorage.setItem(fnl,fn);
+	console.log(localStorage.getItem(fnl));
+	
+	var cc=1;
+	localStorage.setItem(cc,JSON.stringify(objPerson));
+	var userData=JSON.parse(localStorage.getItem(cc));
+	console.log(objPerson.firstName+" "+objPerson.lastName+" "+objPerson.DOB+" "+objPerson.productName);
+	console.log("Ret data"+userData);
+	
+	console.log("Counter is"+localStorage.getItem("counterClient"));
+	fnl="fname"+localStorage.counterClient+"";
+	lnl="lname"+localStorage.counterClient+"";
+	cdl="dob"+localStorage.counterClient+"";
+	pnl="product"+localStorage.counterClient+"";
+	
+	
+	localStorage.setItem(fnl,fn);
+	localStorage.setItem(lnl,ln);
+	localStorage.setItem(cdl,cd);
+	localStorage.setItem(pnl,pn);
+	
+	
+	console.log(localStorage.fnl);
+	console.log(localStorage.lnl);
+	console.log(localStorage.cnl);
+	console.log(localStorage.pnl);*/
+	
+	
+	}
+	else{
+	alert("Local Storage not supported");
+	}
+});
+
+
+
+
+$("#retrall").click(function(){
+if(typeof(Storage)!=="undefined"){
+
+var m=localStorage.counterClient;
+for(i=1;i<m;i++){
+var objid="empinfo"+i+"";
+var retrievedObject = localStorage.getItem(objid);
+console.log('retrievedObject: ', JSON.parse(retrievedObject));
+}
+}
+else{
+console.log("not supported");
+}
+}
+);
+
+
+
+$("#btn1").click(function(){
+if(typeof(Storage)!=="undefined"){
+
+var m=localStorage.counterClient;
+for(i=1;i<m;i++){
+var objid="empinfo"+i+"";
+var retrievedObject = localStorage.getItem(objid);
+var obj=JSON.parse(retrievedObject);
+var nametos=$("#cname").val();
+var nametos1=$("#cname1").val();
+
+var retrievedObject1 = localStorage.getItem('itemdate');
+
+var itemobj=JSON.parse(retrievedObject1);
+
+if(nametos===obj.firstName && nametos1===obj.lastName){
+console.log(obj.productName);
+var dateret=itemobj[obj.productName];
+console.log("DATE"+dateret);
+/*var dateofpurchase=itemobj.x;
+console.log(dateofpurchase);*/
+var objInHTML="First Name:"+obj.firstName+"<br>Last Name:"+obj.lastName+"<br>Age:"+obj.age+"<br>Ordered Product:"+obj.productName+"<br>Date_Of_Purchase:"+dateret+"";
+console.log('retrievedObject: ',obj );
+$("#tobedisplayed").html(objInHTML);
+}
+}
+}
+else{
+console.log("not supported");
+}
+});
+
+
+//Storing PRODUCT NAME AND THEIR CORRESPNDNG ORDR Date
+$("#itemlist").click(function(){
+if(typeof(Storage)!=="undefined"){
+var objItems={
+'DELL Laptop':'2013/01/01',
+'SONY Mobile':'2015/12/24',
+'Printer':'2017/04/02',
+'Air Conditioner':'2017/05/21',
+'Creative Speakers':'2015/02/12',
+'DELL Server':'2014/05/21',
+'Wireless Headphone':'2014/02/06',
+'Wireless Mouse':'2015/01/09',
+'Wireless Headphone':'2014/02/06',
+'Digital Camera':'2016/07/03'
+};
+	localStorage.setItem('itemdate', JSON.stringify(objItems));
+// Retrieve the object from storage
+var retrievedObject = localStorage.getItem('itemdate');
+
+console.log('retrievedObject: ', JSON.parse(retrievedObject));
+}
+
+
+else{
+console.log("Not supported");
+}
+});
+
+</script>	
+</body>
+</html>
