@@ -222,7 +222,13 @@ var TxtType = function(el, toRotate, period) {
 //}
 //http://farm5.static.flickr.com/4379/36703338650_093b266faa_h.jpg
 //google api:923995112314-qfgl03i0i9p2pqi5m7bmkfkaf33ouakb.apps.googleusercontent.com
-
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
 </script>	
 </body>
 </html>
