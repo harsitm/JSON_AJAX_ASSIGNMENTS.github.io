@@ -8,10 +8,8 @@
 	</script>
 	
 	<script>
-		$.getJSON("https://harsitm.github.io/JSON_AJAX_ASSIGNMENTS.github.io/text.json",function(data){
-			console.log("it worked");
-			console.log(JSON.stringify(data));
-		});
+		$.getJSON("https://harsitm.github.io/JSON_AJAX_ASSIGNMENTS.github.io/text.json", function (data) { console.log(data); }).fail(function (jqxhr, status, error) { console.log('error', status, error) });
+		
 	</script>
 </body>
 </html>
